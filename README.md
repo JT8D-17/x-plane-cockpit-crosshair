@@ -1,5 +1,5 @@
 # X-Plane Cockpit Crosshair
-A 3D object cockit crosshair for landing training for use in X-Plane helicopters (and maybe in fixed wing aircraft).
+A 3D object cockpit crosshair, intended for landing training in X-Plane helicopters (and maybe also in fixed wing aircraft).
 
 <a name="toc"></a>
 ## Table of Contents
@@ -18,7 +18,7 @@ A 3D object cockit crosshair for landing training for use in X-Plane helicopters
 <a name="1.0"></a>
 ## 1 - Features
 
-Provides a crosshair outside of the aircraft that will indicate the horizontal and vertical flight path angle for flight path prediction, obstacle avoidance and landing. The crosshair compensates for head position to provide a similar sight picture from any cockpit seat. It supports offsets from a reference point or for the crosshair itself.
+Provides a crosshair that is displayed outside of the aircraft. This crosshair will indicate the horizontal and vertical flight path angle for flight path prediction, obstacle avoidance and landing. The crosshair compensates for head position to provide a similar sight picture from any cockpit seat. It supports offsets from a reference point or for the crosshair itself.
 
 Below a certain air speed or with the landing lights switched on (see "Configuration" below), three vertical guidance bars representing three approach path angles are displayed next to the crosshair.
 
@@ -43,7 +43,7 @@ Below a certain air speed or with the landing lights switched on (see "Configura
 
 - Download the latest xlua plugin from its repository's [Releases page](https://github.com/X-Plane/XLua/releases).
 - Unzip the archive and move the _"xlua"_ folder into the aircraft's _"plugins"_ folder.
-- Download the latest code with the ["Code" --> "Download ZIP" button](https://github.com/JT8D-17/x-plane-cockpit-crosshair/archive/refs/heads/main.zip).
+- Download the latest code with the ["Code" --> "Download ZIP" button](https://github.com/JT8D-17/x-plane-cockpit-crosshair/archive/refs/heads/main.zip) or download an older release from the ["Releases" page](https://github.com/JT8D-17/x-plane-cockpit-crosshair/releases) (pick the "Source Code" download).
 - Unzip the archive.
 - Move the _"cockpit_crosshair"_ folder into _"[Aircraft's main folder]/plugins/xlua/scripts"_.
 
