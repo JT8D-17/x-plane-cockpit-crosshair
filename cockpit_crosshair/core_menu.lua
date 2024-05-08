@@ -13,8 +13,9 @@ local Menu_Items = {
 "Toggle Crosshair",         -- 2
 "Toggle Reference Object",  -- 3
 "Angle Bars On Land. Lts.", -- 4
-"[Separator]",              -- 5
-"Reload Settings",          -- 6
+"Interior View Only",       -- 5
+"[Separator]",              -- 6
+"Reload Settings",          -- 7
 }
 --[[
 
@@ -64,7 +65,10 @@ function Menu_Callbacks(itemref)
             if i == 4 then
                 if Angle_Bars_On_LandLight == 0 then Angle_Bars_On_LandLight = 1 else Angle_Bars_On_LandLight = 0 end
             end
-            if i == 6 then
+            if i == 5 then
+                if Interior_Only == 0 then Interior_Only = 1 else Interior_Only = 0 end
+            end
+            if i == 7 then
                 Instance_Read_Settings()
             end
             Menu_Watchdog(Menu_Items,i)
@@ -81,6 +85,9 @@ function Menu_Watchdog(intable,index)
     end
     if index == 4 then
         if Angle_Bars_On_LandLight == 1 then Menu_CheckItem(Menu_ID,index,"Activate") else Menu_CheckItem(Menu_ID,index,"Deactivate") end
+    end
+    if index == 5 then
+        if Interior_Only == 1 then Menu_CheckItem(Menu_ID,index,"Activate") else Menu_CheckItem(Menu_ID,index,"Deactivate") end
     end
 end
 --[[

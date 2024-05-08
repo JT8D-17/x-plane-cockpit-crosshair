@@ -107,6 +107,19 @@ function Instance_Read_Settings()
                     end
                     print("Cockpit Crosshair: ANGLE_BARS_ON_LAND_LIGHT initial value: "..Angle_Bars_On_LandLight)
                 end
+                -- INTERIOR ONLY
+                if splitvalues[1] == "INTERIOR_ONLY" then -- Look for this string
+                    if #splitvalues == 2 then
+                        if tonumber(splitvalues[2]) ~= nil then
+                            Interior_Only = tonumber(splitvalues[2])
+                        else
+                            print("Cockpit Crosshair: ERROR! Value "..j.." in the INTERIOR_ONLY line of "..filename.." is not a number!")
+                        end
+                    else
+                        print("Cockpit Crosshair: ERROR! Malformed INTERIOR_ONLY line in "..filename..", 2 items required!")
+                    end
+                    print("Cockpit Crosshair: INTERIOR_ONLY initial value: "..Interior_Only)
+                end
                 -- REFERENCE
                 if splitvalues[1] == "REFERENCE" then -- Look for this string
                     if #splitvalues == 5 then

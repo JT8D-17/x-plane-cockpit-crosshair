@@ -82,6 +82,8 @@ AUTO_ENABLE,999
 ANGLE_BARS_MAX_SPD,50
 # Parameter identifier, set to 1 if the angle bars are to be exclusively tied to the landing lights switch
 ANGLE_BARS_ON_LAND_LIGHT,1
+# Parameter identifier, set to 1 if the crosshair should be hidden in the exterior view
+INTERIOR_ONLY,1
 #
 # All rotations in degrees, all offsets in meters
 # Parameter identifier, visibility, offset x (sim/aircraft/view/acf_peX), offset y (sim/aircraft/view/acf_peZ), offset z (sim/aircraft/view/acf_peY)
@@ -108,7 +110,8 @@ Item|Description
 -|-
 Toggle Crosshair|Main switch to toggle the crosshair on and off.
 Toggle Reference Object|Toggles the visibility of the reference object so that it can be positioned
-Angle Bars On Land. Lts.|When active ties the visibility of the angle bars to the landing lights instead of a velocity range
+Angle Bars On Land. Lts.|When active, ties the visibility of the angle bars to the landing lights instead of a velocity range
+Interior View Only|When active, the crosshair will only be shown in interior views
 Reload Settings|Will reload _settings.cfg_
 
 &nbsp;

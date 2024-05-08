@@ -23,6 +23,7 @@ VARIABLES
 ]]
 Folder_Path = "" -- Stores the path to the cockpit_crosshair folder; KEEP EMPTY!
 Angle_Bars_On_LandLight = 0 -- Angle bars tied to landing light?
+Interior_Only = 0 -- Hide crosshair in exterior view?
 --[[
 
 DATAREFS
@@ -37,6 +38,7 @@ simDR_pos_ias = find_dataref("sim/flightmodel/position/indicated_airspeed")
 simDR_pos_head_x = find_dataref("sim/graphics/view/pilots_head_x") -- Head position lateral
 simDR_pos_head_y = find_dataref("sim/graphics/view/pilots_head_y") -- Head position vertical
 simDR_pos_head_z = find_dataref("sim/graphics/view/pilots_head_z") -- Head position horizontal
+simDR_sound_interior = find_dataref("sim/operation/sound/inside_any") -- Used to determine if view is interior or exterior
 --[[
 
 CUSTOM DATAREFS
@@ -76,6 +78,12 @@ end
 --[[ This stuff runs in the timer below ]]
 function Run_In_Timer()
     Menu_Timed() -- See core_menu.lua
+    -- Check if restriction is on and if view is exterior and if yes, hide crosshair
+    if Interior_Only == 1 and simDR_sound_interior == 0 then
+        Dref_Crosshair_In[0] = 0 -- Crosshair is not visible
+    else
+        Dref_Crosshair_In[0] = 1 -- Crosshair is visible
+    end
     -- Control crosshair visbility
     if Dref_Crosshair_In[0] == 1 then -- Check if crosshair visibility is desired
         if simDR_pos_ias < Dref_Crosshair_AutoEnableIAS then
