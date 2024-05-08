@@ -12,9 +12,9 @@ local Menu_Items = {
 "Cockpit Crosshair",        -- 1, MENU TITLE
 "Toggle Crosshair",         -- 2
 "Toggle Reference Object",  -- 3
-"Force Mode",               -- 4
+"Angle Bars On Land. Lts.", -- 4
 "[Separator]",              -- 5
-"Reload Settings",           -- 6
+"Reload Settings",          -- 6
 }
 --[[
 
@@ -56,14 +56,13 @@ function Menu_Callbacks(itemref)
     for i=2,#Menu_Items do
         if itemref == Menu_Items[i] then
             if i == 2 then
-                if Dref_Crosshair_Offsets[0] == 0 then Dref_Crosshair_Offsets[0] = 1 else Dref_Crosshair_Offsets[0] = 0 end
+                if Dref_Crosshair_In[0] == 0 then Dref_Crosshair_In[0] = 1 else Dref_Crosshair_In[0] = 0 end
             end
             if i == 3 then
-                if Dref_Reference_Object[0] == 0 then Dref_Reference_Object[0] = 1 else Dref_Reference_Object[0] = 0 end
+                if Dref_Reference_In_Out[0] == 0 then Dref_Reference_In_Out[0] = 1 else Dref_Reference_In_Out[0] = 0 end
             end
             if i == 4 then
-                Force_Mode = Force_Mode + 1
-                if Force_Mode > 2 then Force_Mode = 0 end
+                if Angle_Bars_On_LandLight == 0 then Angle_Bars_On_LandLight = 1 else Angle_Bars_On_LandLight = 0 end
             end
             if i == 6 then
                 Instance_Read_Settings()
@@ -75,15 +74,13 @@ end
 --[[ Menu watchdog that is used to check an item or change its prefix ]]
 function Menu_Watchdog(intable,index)
     if index == 2 then
-        if Dref_Crosshair_Object[0] == 1 then Menu_CheckItem(Menu_ID,index,"Activate") else Menu_CheckItem(Menu_ID,index,"Deactivate") end
+        if Dref_Crosshair_Out[0] == 1 then Menu_CheckItem(Menu_ID,index,"Activate") else Menu_CheckItem(Menu_ID,index,"Deactivate") end
     end
     if index == 3 then
-        if Dref_Reference_Object[0] == 1 then Menu_CheckItem(Menu_ID,index,"Activate") else Menu_CheckItem(Menu_ID,index,"Deactivate") end
+        if Dref_Reference_In_Out[0] == 1 then Menu_CheckItem(Menu_ID,index,"Activate") else Menu_CheckItem(Menu_ID,index,"Deactivate") end
     end
     if index == 4 then
-        if Force_Mode == 0 then Menu_ChangeItemSuffix(Menu_ID,index,"[Auto]",intable) end
-        if Force_Mode == 1 then Menu_ChangeItemSuffix(Menu_ID,index,"[Angle]",intable) end
-        if Force_Mode == 2 then Menu_ChangeItemSuffix(Menu_ID,index,"[Flight Path]",intable) end
+        if Angle_Bars_On_LandLight == 1 then Menu_CheckItem(Menu_ID,index,"Activate") else Menu_CheckItem(Menu_ID,index,"Deactivate") end
     end
 end
 --[[

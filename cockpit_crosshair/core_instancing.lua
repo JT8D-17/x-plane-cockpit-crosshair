@@ -68,6 +68,7 @@ function Instance_Read_Settings()
             if string.match(line,"^[^#]") then -- Only catch lines that are not starting with a "#"
                 local splitvalues = SplitString(line,"([^,]+)") -- Split line at commas
                 --print(table.concat(splitvalues,";"))
+                -- AUTO ENABLE
                 if splitvalues[1] == "AUTO_ENABLE" then -- Look for this string
                     if #splitvalues == 2 then
                         if tonumber(splitvalues[2]) ~= nil then
@@ -80,35 +81,38 @@ function Instance_Read_Settings()
                     end
                     print("Cockpit Crosshair: AUTO_ENABLE initial value: "..Dref_Crosshair_AutoEnableIAS)
                 end
-                if splitvalues[1] == "ANGLE_MODE" then -- Look for this string
+                -- MAX SPEED FOR ANGLE BARS
+                if splitvalues[1] == "ANGLE_BARS_MAX_SPD" then -- Look for this string
                     if #splitvalues == 2 then
                         if tonumber(splitvalues[2]) ~= nil then
-                            Dref_Crosshair_AngleModeIAS = tonumber(splitvalues[2])
+                            Dref_Crosshair_AngleBarsIAS = tonumber(splitvalues[2])
                         else
-                            print("Cockpit Crosshair: ERROR! Value "..j.." in the ANGLE_MODE line of "..filename.." is not a number!")
+                            print("Cockpit Crosshair: ERROR! Value "..j.." in the ANGLE_BARS_MAX_SPD line of "..filename.." is not a number!")
                         end
                     else
-                        print("Cockpit Crosshair: ERROR! Malformed ANGLE_MODE line in "..filename..", 2 items required!")
+                        print("Cockpit Crosshair: ERROR! Malformed ANGLE_BARS_MAX_SPD line in "..filename..", 2 items required!")
                     end
-                    print("Cockpit Crosshair: ANGLE_MODE initial value: "..Dref_Crosshair_AngleModeIAS)
+                    print("Cockpit Crosshair: ANGLE_BARS_MAX_SPD initial value: "..Dref_Crosshair_AngleBarsIAS)
                 end
-                if splitvalues[1] == "MODE_OVERRIDE" then -- Look for this string
+                -- ANGLE BAR ON LAND LIGHT
+                if splitvalues[1] == "ANGLE_BARS_ON_LAND_LIGHT" then -- Look for this string
                     if #splitvalues == 2 then
                         if tonumber(splitvalues[2]) ~= nil then
-                            Force_Mode = tonumber(splitvalues[2])
+                            Angle_Bars_On_LandLight = tonumber(splitvalues[2])
                         else
-                            print("Cockpit Crosshair: ERROR! Value "..j.." in the MODE_OVERRIDE line of "..filename.." is not a number!")
+                            print("Cockpit Crosshair: ERROR! Value "..j.." in the ANGLE_BARS_ON_LAND_LIGHT line of "..filename.." is not a number!")
                         end
                     else
-                        print("Cockpit Crosshair: ERROR! Malformed MODE_OVERRIDE line in "..filename..", 2 items required!")
+                        print("Cockpit Crosshair: ERROR! Malformed ANGLE_BARS_ON_LAND_LIGHT line in "..filename..", 2 items required!")
                     end
-                    print("Cockpit Crosshair: MODE_OVERRIDE initial value: "..Force_Mode)
+                    print("Cockpit Crosshair: ANGLE_BARS_ON_LAND_LIGHT initial value: "..Angle_Bars_On_LandLight)
                 end
+                -- REFERENCE
                 if splitvalues[1] == "REFERENCE" then -- Look for this string
                     if #splitvalues == 5 then
                         for j=2,5 do
                             if tonumber(splitvalues[j]) ~= nil then
-                                Dref_Reference_Object[j-2] = tonumber(splitvalues[j])
+                                Dref_Reference_In_Out[j-2] = tonumber(splitvalues[j])
                             else
                                 print("Cockpit Crosshair: ERROR! Value "..j.." in the REFERENCE line of "..filename.." is not a number!")
                             end
@@ -116,13 +120,14 @@ function Instance_Read_Settings()
                     else
                         print("Cockpit Crosshair: ERROR! Malformed REFERENCE line in "..filename..", 5 items required!")
                     end
-                    print("Cockpit Crosshair: Reference object initial values: "..Dref_Reference_Object[0]..","..Dref_Reference_Object[1]..","..Dref_Reference_Object[2]..","..Dref_Reference_Object[3])
+                    print("Cockpit Crosshair: Reference object initial values: "..Dref_Reference_In_Out[0]..","..Dref_Reference_In_Out[1]..","..Dref_Reference_In_Out[2]..","..Dref_Reference_In_Out[3])
                 end
+                -- CROSSHAIR
                 if splitvalues[1] == "CROSSHAIR" then -- Look for this string
                     if #splitvalues == 8 then
                         for j=2,8 do
                             if tonumber(splitvalues[j]) ~= nil then
-                                Dref_Crosshair_Offsets[j-2] = tonumber(splitvalues[j])
+                                Dref_Crosshair_In[j-2] = tonumber(splitvalues[j])
                             else
                                 print("Cockpit Crosshair: ERROR! Value "..j.." in the CROSSHAIR line of "..filename.." is not a number!")
                             end
@@ -130,7 +135,22 @@ function Instance_Read_Settings()
                     else
                         print("Cockpit Crosshair: ERROR! Malformed CROSSHAIR line in "..filename..", 8 items required!")
                     end
-                    print("Cockpit Crosshair: Crosshair object initial values: "..Dref_Crosshair_Offsets[0]..","..Dref_Crosshair_Offsets[1]..","..Dref_Crosshair_Offsets[2]..","..Dref_Crosshair_Offsets[3]..","..Dref_Crosshair_Offsets[4]..","..Dref_Crosshair_Offsets[5]..","..Dref_Crosshair_Offsets[6]..","..Dref_Crosshair_Offsets[7])
+                    print("Cockpit Crosshair: Crosshair object initial values: "..Dref_Crosshair_In[0]..","..Dref_Crosshair_In[1]..","..Dref_Crosshair_In[2]..","..Dref_Crosshair_In[3]..","..Dref_Crosshair_In[4]..","..Dref_Crosshair_In[5]..","..Dref_Crosshair_In[6]..","..Dref_Crosshair_In[7])
+                end
+                -- ANGLE BARS
+                if splitvalues[1] == "ANGLE_BARS" then -- Look for this string
+                    if #splitvalues == 5 then
+                        for j=2,5 do
+                            if tonumber(splitvalues[j]) ~= nil then
+                                Dref_Angle_Bars_In[j-2] = tonumber(splitvalues[j])
+                            else
+                                print("Cockpit Crosshair: ERROR! Value "..j.." in the ANGLE_BARS line of "..filename.." is not a number!")
+                            end
+                        end
+                    else
+                        print("Cockpit Crosshair: ERROR! Malformed ANGLE_BARS line in "..filename..", 5 items required!")
+                    end
+                    print("Cockpit Crosshair: Reference object initial values: "..Dref_Angle_Bars_In[0]..","..Dref_Angle_Bars_In[1]..","..Dref_Angle_Bars_In[2]..","..Dref_Angle_Bars_In[3])
                 end
                 i=i+1 -- Checksum for successfully parsed lines
             end

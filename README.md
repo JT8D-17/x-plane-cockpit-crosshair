@@ -18,13 +18,9 @@ A 3D object cockit crosshair for landing training for use in X-Plane helicopters
 <a name="1.0"></a>
 ## 1 - Features
 
-Provides a crosshair outside of the aircraft that will either:
-- indicate a fixed offset angle ("angle" mode), indended for approach angle training.
-- indicate the flight path angle ("flight path" mode), intended for flight path prediction for obstacle avoidance (and landing).
+Provides a crosshair outside of the aircraft that will indicate the horizontal and vertical flight path angle for flight path prediction, obstacle avoidance and landing. The crosshair compensates for head position to provide a similar sight picture from any cockpit seat. It supports offsets from a reference point or for the crosshair itself.
 
-Switchover between modes can be manual or automatic at a given velocity. The crosshair can also automatically turn off at a given velocity.
-
-The crosshair uses a movable reference point as origin. This can be the aircraft origin or pilot head.
+Below a certain air speed or with the landing lights switched on (see "Configuration" below), three vertical guidance bars representing three approach path angles are displayed next to the crosshair.
 
 &nbsp;
 
@@ -80,18 +76,21 @@ The code for parsing and loading the settings file is hardened against malformed
 ```
 # Settings for Cockpit Crosshair
 #
-# Parameter identifier, crosshair mode override (0=auto,1=angle,2=flight path)
-MODE_OVERRIDE,0
 # Parameter identifier, airspeed in knots indicated below which the crosshair turns on
 AUTO_ENABLE,999
-# Parameter identifier, airspeed in knots indicated below which angle mode is active
-ANGLE_MODE,50
+# Parameter identifier, airspeed in knots indicated below which the angle bars are visible
+ANGLE_BARS_MAX_SPD,50
+# Parameter identifier, set to 1 if the angle bars are to be exclusively tied to the landing lights switch
+ANGLE_BARS_ON_LAND_LIGHT,1
+#
 # All rotations in degrees, all offsets in meters
 # Parameter identifier, visibility, offset x (sim/aircraft/view/acf_peX), offset y (sim/aircraft/view/acf_peZ), offset z (sim/aircraft/view/acf_peY)
 #REFERENCE,0,0.38,-1.88,0.338
 REFERENCE,0,0,0,0
 # Parameter identifier, visibility, rotation x, rotation y, rotation z, offset x, offset y, offset z
-CROSSHAIR,1,-10,0,0,0,10,0
+CROSSHAIR,1,0,0,0,0,10,0
+# Parameter identifier, visibility, angle, angle, angle
+ANGLE_BARS,1,-7,-10,-12
 ```
 
 &nbsp;
@@ -101,7 +100,7 @@ CROSSHAIR,1,-10,0,0,0,10,0
 <a name="6.0"></a>
 ## 6 - Menu
 
-A menu named "Cockpit Crosshair" will be added to the aircraft mdenu in X-Plane's main menu bar.
+A menu named "Cockpit Crosshair" will be added to the aircraft menu on X-Plane's main menu bar.
 
 Menu options are the follwing:
 
@@ -109,7 +108,7 @@ Item|Description
 -|-
 Toggle Crosshair|Main switch to toggle the crosshair on and off.
 Toggle Reference Object|Toggles the visibility of the reference object so that it can be positioned
-Force Mode _[Active Mode]_|Each click will force the crosshair into a given mode in the following order: "Auto" --> "Angle" --> "Flight Path"
+Angle Bars On Land. Lts.|When active ties the visibility of the angle bars to the landing lights instead of a velocity range
 Reload Settings|Will reload _settings.cfg_
 
 &nbsp;
@@ -124,21 +123,22 @@ Reload Settings|Will reload _settings.cfg_
 Dataref|Type|Writable|Description
 -|-|-|-
 cockpit_crosshair/reference_point|array[4]|Yes|Visibility and location information for the reference object (Visibility,X,Y,Z)
-cockpit_crosshair/crosshair|array[7]|No|Output information for the crosshair object: (Visibility,Rot_X,Rot_Y,Rot_Z,Pos_X,Pos_Y,Pos_Z)
-cockpit_crosshair/crosshair_offsets|array[7]|Yes|Offset information for the crosshair object: (Visibility,Rot_X,Rot_Y,Rot_Z,Pos_X,Pos_Y,Pos_Z)
-cockpit_crosshair/auto_enable_ias|number|Yes|Indicated airspeed in knots at which the crosshair will turn on
-cockpit_crosshair/angle_mode_ias|number|Yes|Indicated airspeed in knots at which the crosshair switch from flight path to angle mode
+cockpit_crosshair/crosshair_in|array[7]|Yes|Input properties for the crosshair object: (Visibility,Rot_X,Rot_Y,Rot_Z,Pos_X,Pos_Y,Pos_Z)
+cockpit_crosshair/crosshair_out|array[7]|No|Output properties for the crosshair object: (Visibility,Rot_X,Rot_Y,Rot_Z,Pos_X,Pos_Y,Pos_Z)
+cockpit_crosshair/angle_bars_in|array[4]|Yes|Input properties for the angle bars: (Visibility,Rot_Bar_1,Rot_Bar_2,Rot_Bar_3)
+cockpit_crosshair/angle_bars_out|array[4]|No|Output properties for the angle bars: (Visibility,Rot_Bar_1,Rot_Bar_2,Rot_Bar_3)
+cockpit_crosshair/auto_enable_ias|number|Yes|Indicated airspeed in knots below which the crosshair will turn on
+cockpit_crosshair/angle_bars_ias|number|Yes|Indicated airspeed in knots below which the angle bars are visible
 
 &nbsp;
 
-"Cockpit Crosshair" offers the following commands that can be bound to any input device
+"Cockpit Crosshair" offers the following commands that can be bound to any input device:
 
 Command|Description
 -|-
 cockpit_crosshair/toggle_crosshair|Toggle the crosshair on/off
 cockpit_crosshair/toggle_reference|Toggles the reference object's visibility on/off
 cockpit_crosshair/reload_settings|Reloads _settings.cfg_
-cockpit_crosshair/cycle_mode|Each activation will force the crosshair into a given mode in the following order: "Auto" --> "Angle" --> "Flight Path"
 
 &nbsp;
 
@@ -149,8 +149,9 @@ cockpit_crosshair/cycle_mode|Each activation will force the crosshair into a giv
 
 - Because the crosshair and reference object is spawned with XPLMCreateInstance, it will always be treated as an external object
 - The crosshair can not be scaled, so up close it will be very large and far away potentially hard to see.
-- The crosshair can not be drawn over 3D objects, so if it vanishes behind the panel use side slip in herlicopters to put it into a side window or move the eyepoint upward to see it over the nose in fixed wing aircraft.
-- The crosshair animation applies rotation first and translation second, so any X,Y,Z offsets will be applied at an angle. I may fix this in the future.
+- The crosshair can not be drawn over 3D objects, so if it vanishes behind the panel, use side slip in helicopters to put it into a side window or move the eyepoint upward to see it over the nose in fixed wing aircraft.
+- The crosshair animation applies rotation first and translation second, so any X,Y,Z offsets will be applied at an angle. I might fix this in the future.
+- The slight delay when toggling crosshair visbility features on and off is deliberate because the logic runs in a timer with a 1 second refresh interval to save CPU cycles.
 
 &nbsp;
 
