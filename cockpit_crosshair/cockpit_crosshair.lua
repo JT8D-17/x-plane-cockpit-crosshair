@@ -79,15 +79,16 @@ end
 function Run_In_Timer()
     Menu_Timed() -- See core_menu.lua
     -- Check if restriction is on and if view is exterior and if yes, hide crosshair
-    if Interior_Only == 1 and simDR_view_external == 1 then
-        Dref_Crosshair_In[0] = 0 -- Crosshair is not visible
-    else
-        Dref_Crosshair_In[0] = 1 -- Crosshair is visible
-    end
+
     -- Control crosshair visbility
     if Dref_Crosshair_In[0] == 1 then -- Check if crosshair visibility is desired
         if simDR_pos_ias < Dref_Crosshair_AutoEnableIAS then
-            Dref_Crosshair_Out[0] = 1 -- Crosshair is visible
+            if Interior_Only == 1 and simDR_view_external == 1 then
+                Dref_Crosshair_Out[0] = 0 -- Crosshair is not visible
+            else
+                Dref_Crosshair_Out[0] = 1 -- Crosshair is visible
+            end
+            --Dref_Crosshair_Out[0] = 1 -- Crosshair is visible
         else
             Dref_Crosshair_Out[0] = 0 -- Crosshair is not visible
         end
@@ -133,10 +134,11 @@ function flight_start()
     Instancing_Start() -- See core_instancing.lua
     Menu_Init() -- See core_menu.lua
     Menu_Build() -- See core_menu.lua
-    run_at_interval(Run_In_Timer,1) -- Run every second
+    --run_at_interval(Run_In_Timer,1) -- Run every second
 end
 --[[ This runs each frame ]]
 function after_physics()
+    Run_In_Timer()
     Instance_Update_Pos()
     Dref_Crosshair_Out[1] = simDR_pos_vpath - simDR_pos_the -- Rot_X for the crosshair
     Dref_Crosshair_Out[2] = Dref_Crosshair_In[2]    -- Rot_Y
